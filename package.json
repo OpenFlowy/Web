@@ -1,0 +1,14 @@
+{
+  "name": "openflowy-web",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "mkdir -p ./dist; cp src/index.html dist/; npx tsc src/*.ts --outFile ./dist/app.js",
+    "live": "cd ./dist/ ; npx live-server --verbose ./",
+    "prepublish-build-output": "echo === Running pre-publish step ===; npm run build",
+    "publish-build-output": "rm -rf ../build-output/* && commit_hash=$(git log -1 --pretty=%H master) && pushd ../build-output && git checkout ./ && popd && cp -R ./dist/. ../build-output/ && cd ../build-output/ && git add ./ && git commit -m \"Added build output of $commit_hash\""
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "typescript": "^5.5.4"
+  }
+}
