@@ -115,6 +115,7 @@ class Task
          * decimal digit as the first character.
          */
         li.setAttribute('id', 'id-'+this._id);
+        li.setAttribute('contenteditable', 'true');
         li.innerHTML = this.text;
 
         if (this.children.length !== 0)
