@@ -1,0 +1,38 @@
+const path = require('path');
+
+const outDir = './dist'
+
+module.exports = {
+  /*
+   * We'll probably never use `production` mode, given the conveneince
+   * `development` mode provides to users (debugging, troubleshooting, and
+   * extending in their own browser).
+   *
+   * TODO: but consider taking some hints from the Webpack Production guide at
+   * https://webpack.js.org/guides/production/
+   */
+  "mode": "development",
+  entry: './src/main.ts',
+  devtool: 'source-map',
+  devServer: {
+    static: outDir,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
+  output: {
+    // TODO: Post-GA, consider naming file including the contenthash; see
+    // Webpack guide on Caching.
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, outDir),
+  },
+};
