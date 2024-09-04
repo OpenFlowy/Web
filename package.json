@@ -4,18 +4,20 @@
   "# 2": "is used to make them unique, otherwise the editor compaons about",
   "# 3": "duplicate object key, and more annoyingly, the npm commands delete",
   "# 4": "duplicate keys",
+  "# 5": "------------------------------------------------------------------ ",
   "name": "openflowy-web",
   "version": "0.0.1",
   "scripts": {
     "# 0": "The scripts here are assumed to be run using Bash shell.",
+    "# 1": "--------------------------------------------------------",
     "clean": "rm -rf ./dist",
     "prebuild": "echo === Running clean === && npm run clean",
     "build": "mkdir -p ./dist && cp -R src/index.html static/* dist/ && npx webpack --mode=development",
     "prelive": "echo === Running Build === && npm run build",
     "live": "npx webpack serve --open",
-    "# 1": "Check: Are there any uncommitted files in Git staging area? Are there any modified files in Git? Are there any untracked files in Git? ",
+    "# 2": "Check: Are there any uncommitted files in Git staging area? Are there any modified files in Git? Are there any untracked files in Git? ",
     "prepublish-web-output": "echo === Running pre-publish step and checks === && set -x && git diff --cached --exit-code && git diff --exit-code && ! git clean -n | read -n1 && npm run build",
-    "# 2": "We do this dance to check-in the build output to a branch separate from development branch.",
+    "# 3": "We do this dance to check-in the build output to a branch separate from development branch.",
     "publish-web-output": "rm -rf ../web-output/* && commit_hash=$(git log -1 --pretty=%H master) && pushd ../web-output && git checkout -f wen-output && popd && cp -R ./dist/. ../web-output/ && cd ../web-output/ && git add ./ && git commit -m \"Updated build output using commit $commit_hash\""
   },
   "devDependencies": {
