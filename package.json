@@ -16,7 +16,7 @@
     "# 1": "Check: Are there any uncommitted files in Git staging area? Are there any modified files in Git? Are there any untracked files in Git? ",
     "prepublish-web-output": "echo === Running pre-publish step and checks === && set -x && git diff --cached --exit-code && git diff --exit-code && ! git clean -n | read -n1 && npm run build",
     "# 2": "We do this dance to check-in the build output to a branch separate from development branch.",
-    "publish-web-output": "rm -rf ../web-output/* && commit_hash=$(git log -1 --pretty=%H master) && pushd ../web-output && git checkout ./ && popd && cp -R ./dist/. ../web-output/ && cd ../web-output/ && git add ./ && git commit -m \"Updated build output using commit $commit_hash\""
+    "publish-web-output": "rm -rf ../web-output/* && commit_hash=$(git log -1 --pretty=%H master) && pushd ../web-output && git checkout -f wen-output && popd && cp -R ./dist/. ../web-output/ && cd ../web-output/ && git add ./ && git commit -m \"Updated build output using commit $commit_hash\""
   },
   "devDependencies": {
     "@types/uuid": "^10.0.0",

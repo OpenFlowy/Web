@@ -1,13 +1,6 @@
-let message: string = 'OpenFlowy';
-console.log(message);
-
-// Create and append a heading element
-let heading = document.createElement('h1');
-heading.textContent = message;
-document.body.appendChild(heading);
-
 import { v4 as uuidv4, NIL as NIL_UUID } from 'uuid';
 
+// type 'uuid' is an alias for type 'string'
 type uuid = string;
 
 /* List of all Task objects seen so far */
@@ -49,9 +42,9 @@ class Task
     {
         if (Task._nilTask === undefined)
         {
-            // Cannot use the Task constructor here; will cause recursion.
+            // Cannot use the Task constructor here; will cause infinite
+            // recursion.
             Task._nilTask = Object.create(Task.prototype);
-
 
             // Special case: nilTask is its own parent
             Task._nilTask.parent = Task._nilTask;
@@ -147,6 +140,11 @@ function renderRootTasks( el: Element) : Element
 
 function main()
 {
+    // Create and append a heading element
+    let heading = document.createElement('h1');
+    heading.textContent = message;
+    document.body.appendChild(heading);
+
     /*
     let t1  : Task = new Task("Task 1");
     let t1_1: Task = new Task("Task 1.1", t1);
@@ -159,7 +157,7 @@ function main()
     let t3_1: Task = new Task("Task 3.1", t3);
     */
 
-    let T1     : Task = new Task('This is <b>OpenFlowy</b>, a WorkFlowy clone'                        );//         );
+    let T1     : Task = new Task('This is <b>OpenFlowy</b>, an alternative to WorkFlowy'              );//         );
     let T1_1   : Task = new Task(  'Also available at <a href=https://FreeFlowy.com>FreeFlowy.com</a>');//   , T1  );
     let T2     : Task = new Task('Use OpenFlowy to manage your tasks as a list'                       );//         );
     let T2_1   : Task = new Task(  'Each Task can have Subtasks'                                      );//   , T2  );
@@ -184,6 +182,10 @@ function main()
     document.body.appendChild(appHolder);
 }
 
+// Call main() and run the app as soon as DOM is done loading
 window.addEventListener('DOMContentLoaded', function() {
     main();
 });
+
+let message: string = 'OpenFlowy';
+console.log(message);

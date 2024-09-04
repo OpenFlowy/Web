@@ -4,7 +4,7 @@ OpenFlowy / FreeFlowy
 A local-first, offline-first, login-optional, private, and free alternative to
 WorkFlowy.
 
-- This is [OpenFlowy][], like WorkFlowy
+- This is [OpenFlowy][], an alternative to WorkFlowy
   - Also available at [FreeFlowy.com][]
 - Use OpenFlowy to manage your tasks as a list
   - Each Task can have Subtasks
