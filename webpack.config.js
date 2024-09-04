@@ -5,10 +5,9 @@ const outDir = './dist'
 module.exports = {
   /*
    * We'll probably never use `production` mode, given the conveneince
-   * `development` mode provides to users (debugging, troubleshooting, and
-   * extending in their own browser).
-   *
-   * TODO: but consider taking some hints from the Webpack Production guide at
+   * `development` mode provides to the users (debugging, troubleshooting, and
+   * extending in their own browser). (TODO:) But consider taking some hints
+   * from the Webpack Production guide at
    * https://webpack.js.org/guides/production/
    */
   "mode": "development",
@@ -30,8 +29,10 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    // TODO: Post-GA, consider naming file including the contenthash; see
-    // Webpack guide on Caching.
+    /*
+     * TODO: Post-GA, consider the file to include the contenthash; see Webpack
+     * guide on Caching.
+     */
     filename: 'bundle.js',
     path: path.resolve(__dirname, outDir),
   },
