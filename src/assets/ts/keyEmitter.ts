@@ -48,6 +48,50 @@ const ignoreMap: {[keyCode: number]: string} = {
   93: 'right command alone',
 };
 
+/*
+ * KeyBindings.keyCode (used below) and KeyBindings.code (not used below) are
+ * not to be ideally used to find which key was pressed. See
+ * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode.
+ *
+ * Instead of changing all of code to use the standard keys, we just create this
+ * mapping here that tells us which standard keys map to the keys expected by
+ * the application, and we set the key to the mapped value so that the rest of
+ * the code can continue to work unmodified.
+ *
+ * This change came about when I discovered that on
+ * macOS(13.6.9)+Firefox(129.0.2) the key 'j' leads to Firefox sending the key
+ * as 'a', which caused the application to go into INSERT mode, instead of the
+ * expected behaviour move-down-to-next-line action.
+ *
+ * The old behaviour can be turned on again by setting applyFixes = false;
+ *
+ * TODO: Remove this hack, and actually change the keymaps in vim.ts to use the
+ * standard key values (the one on the left side in the below mapping).
+ *
+ * TODO: Find more keys from the standard list that can be mapped here. As of
+ * now I don't see any that are relevant to the current keys used in vim.ts.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
+ */
+const applyFixes: boolean = true;
+const StandardKeyToVimFlowyMap: {[key:string]:Key} = {
+      "Escape" : "esc"       ,
+   "Backspace" : "backspace" ,
+      "Delete" : "delete"    ,
+     "ArrowUp" : "up"        ,
+   "ArrowDown" : "down"      ,
+   "ArrowLeft" : "left"      ,
+  "ArrowRight" : "right"     ,
+       "Enter" : "enter"     ,
+         "Tab" : "tab"       ,
+        "Home" : "home"      ,
+         "End" : "end"       ,
+      "PageUp" : "page up"   ,
+    "PageDown" : "page down" ,
+  " "          : "space"     ,
+  /* Validate and add 'Meta -> 'meta' mapping. vim.ts has meta+home and some other uses for it */
+};
+
 const keyCodeMap: {[keyCode: number]: Key} = {
   8: 'backspace',
   9: 'tab',
@@ -99,6 +143,12 @@ for (let j = 1; j <= 26; j++) {
   shiftMap[lower] = letter;
 }
 
+if (applyFixes)
+{
+  logger.debug("keyCodeMap: ");
+  console.table(keyCodeMap);
+}
+
 if (browser_utils.isFirefox()) {
   keyCodeMap[173] = '-';
 }
@@ -116,27 +166,52 @@ export default class KeyEmitter extends EventEmitter {
       });
     });
 
+    /* TODO: jQuery $.keydown(e ...) is deprecated; replace it with $.on("keydown", e ...) */
     return $(document).keydown(e => {
+      logger.debug("Received keydown event:", e);
       // IME input keycode is 229
       if (e.keyCode === 229) {
+        logger.debug("keyCode is 229; returning:");
         return false;
       }
       if (e.keyCode in ignoreMap) {
+        logger.debug("keyCode is in ignoreMap; returning:");
         return true;
       }
-      let key;
+      let key = 'error';
+
+      if (applyFixes)
+      {
+        key = e.key;
+        logger.debug("set key to:", key);
+      }
+
+      if (applyFixes && key in StandardKeyToVimFlowyMap)
+      {
+        let newKey = StandardKeyToVimFlowyMap[key];
+        logger.debug("turned standard ", key," to ", newKey);
+         key = newKey;
+      }
+      if (applyFixes){} else
       if (e.keyCode in keyCodeMap) {
         key = keyCodeMap[e.keyCode];
+        logger.debug("keyCode is: ", e.keyCode);
+        logger.debug("keyCodeMap[] returned", key);
       } else {
         // this is necessary for typing stuff..
         key = String.fromCharCode(e.keyCode);
+        logger.debug("String.fromCharCode() returned", key);
       }
 
       if (e.shiftKey) {
         if (key in shiftMap) {
+          if (!applyFixes) {
           key = shiftMap[key];
+          logger.debug("shiftMap[] returned", key);
+          }
         } else {
           key = `shift+${key}`;
+          logger.debug("shift+: ", key);
         }
       }
 
@@ -153,6 +228,7 @@ export default class KeyEmitter extends EventEmitter {
       }
 
       logger.debug('keycode', e.keyCode, 'key', key);
+      logger.debug('KeyBoardEvent.{code, key}', e.code, e.key);
       const results = this.emit('keydown', key);
       // return false to stop propagation, if any handler handled the key
       if (_.some(results)) {

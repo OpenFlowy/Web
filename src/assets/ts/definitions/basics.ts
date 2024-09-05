@@ -179,6 +179,11 @@ keyDefinitions.registerAction(new Action(
   async function({ session, keyStream, repeat }) {
     let key = await keyStream.dequeue();
     // TODO: refactor keys so this is unnecessary
+    /*
+     * TODO: Find out when this code is exercised, and then investigate if this
+     * code can be deleted becuase of our adoption of KeyBindings.key in
+     * keyEmitter.ts.
+     */
     if (key === 'space') { key = ' '; }
     await session.replaceCharsAfterCursor(key, repeat);
   },

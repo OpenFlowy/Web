@@ -85,7 +85,7 @@ export default class SessionComponent extends React.Component<Props, State> {
     this.fetchAndRerender = this.fetchAndRerender.bind(this);
 
     // make true to output time taken to get render contents
-    this.profileRender = true;
+    this.profileRender = false;
 
     this.getProfiler = (profileRender) => {
       if (!profileRender) {

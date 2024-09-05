@@ -145,6 +145,7 @@ export const VISUAL_LINE_MODE_MAPPINGS: HotkeyMapping = Object.assign({
   'visual-line-indent': [['>'], ['tab'], ['ctrl+l']],
   'visual-line-unindent': [['<'], ['shift+tab'], ['ctrl+h']],
   'visual-line-swap-case': [['~']],
+  /* TODO: Add support for moving up/down ((arrow-(up/down))/(j/k)) to select lines above/below */
 }, NORMAL_MOTION_MAPPINGS);
 
 export const INSERT_MODE_MAPPINGS: HotkeyMapping = Object.assign({
