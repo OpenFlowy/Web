@@ -744,7 +744,11 @@
             this.moveFocusUp = async () => {
                 const element = this.previousSibling;
                 if (element) {
-                    this.moveFocus(element);
+                    let target = element;
+                    while (target.hasSubtasks && target.expanded) {
+                        target = target.subtasks.lastChild;
+                    }
+                    this.moveFocus(target);
                     return;
                 }
                 const parent = this.parent();
@@ -753,9 +757,23 @@
                 }
             };
             this.moveFocusDown = async () => {
+                if (this.hasSubtasks && this.expanded) {
+                    let target = this.subtasks.firstChild;
+                    this.moveFocus(target);
+                    return;
+                }
                 const element = this.nextSibling;
                 if (element) {
                     this.moveFocus(element);
+                    return;
+                }
+                let parent = this.parent();
+                while (parent) {
+                    if (parent.nextSibling) {
+                        this.moveFocus(parent.nextSibling);
+                        return;
+                    }
+                    parent = parent.parent();
                 }
             };
             this.moveFocus = (task) => {
@@ -1172,6 +1190,11 @@
         }
     }
 
+    {
+        navigator.serviceWorker.register("sw.js")
+            .then(() => console.log("service worker registered"))
+            .catch((err) => console.error("service worker registration error", err));
+    }
     window.addEventListener("DOMContentLoaded", main);
 
 }());
