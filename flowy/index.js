@@ -800,6 +800,11 @@
                     return;
                 }
                 const range = document.createRange();
+                const len = this.tasktext.childNodes[0].length;
+                if (pos >= len) {
+                    console.log(`pos is: ${pos} and len is: ${len}; clipping pos to equal len`);
+                    pos = len;
+                }
                 range.setStart(this.tasktext.childNodes[0], pos);
                 range.collapse(true);
                 const sel = window.getSelection();
@@ -1190,11 +1195,6 @@
         }
     }
 
-    {
-        navigator.serviceWorker.register("sw.js")
-            .then(() => console.log("service worker registered"))
-            .catch((err) => console.error("service worker registration error", err));
-    }
     window.addEventListener("DOMContentLoaded", main);
 
 }());
