@@ -344,9 +344,9 @@
             return del(task.id);
         },
         async initialize() {
-            const root = { id: "root", text: " ", checked: false, pinned: false, collapsed: false, children: [] };
+            const root = { id: "root", text: " -root- ", checked: false, pinned: false, collapsed: false, children: [] };
             await set("root", root, this.store);
-            await this.create(root, "This is flowy, a small WorkFlowy clone");
+            await this.create(root, "This is flowy, a small web app similar to WorkFlowy");
             const l1 = await this.create(root, "It allows you to organize your life into lists");
             const l2 = await this.create(l1, "Lists can have sublists");
             await this.create(l2, "and they can have sublists");
@@ -356,10 +356,10 @@
             const l4 = await this.create(l2, "Important Nested items can be pinned on top for direct attention");
             l4.pinned = true;
             await this.update(l4);
-            await this.create(root, "It works out of the box in the browser, and optionally allows you to plug in a storage server to back tasks up.");
+            await this.create(root, "It works out of the box in the browser, and optionally allows you to save data online.");
             await this.create(root, "It also works offline.");
             await this.create(root, "For more details on different features, open the hamburger menu on the top left.");
-            await this.create(root, "The app is open source at https://github.com/suyash/flowy, file any issues there.");
+            await this.create(root, "The source code is available at https://github.com/OpenFlowy/flowy Propose and discuss features there.");
             return root;
         },
     };
@@ -801,8 +801,8 @@
                 }
                 const range = document.createRange();
                 const len = this.tasktext.childNodes[0].length;
-                if (pos >= len) {
-                    console.log(`pos is: ${pos} and len is: ${len}; clipping pos to equal len`);
+                if (pos > len) {
+                    console.debug(`pos is: ${pos} and len is: ${len}; clipping pos to equal len`);
                     pos = len;
                 }
                 range.setStart(this.tasktext.childNodes[0], pos);
@@ -1195,6 +1195,16 @@
         }
     }
 
+    {
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.register("sw.js")
+                .then(() => console.log("Service Worker registered"))
+                .catch((err) => console.error("service worker registration error", err));
+        }
+        else {
+            console.log("Service Worker feature is not available.");
+        }
+    }
     window.addEventListener("DOMContentLoaded", main);
 
 }());
